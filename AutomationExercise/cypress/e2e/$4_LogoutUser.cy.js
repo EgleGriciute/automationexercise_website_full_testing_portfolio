@@ -2,18 +2,25 @@
 
 describe("$4_LogoutUser", () => {
 
+    before(() => {
+        cy.hideGoogleAds();
+    })
+
     beforeEach(() => {
         // Navigate to the login page before each test:
         cy.visit('/');
     });
 
-    it("Should register, login, and logout successfully", () => {
+    it("should logout successfully", () => {
 
         // 1. Launch browser:
         // 2. Navigate to url 'http://automationexercise.com':
         // 3. Verify that home page is visible successfully:
 
+        cy.verifyHomePageIsVisible();
+
         cy.registerUser().then(() => {
+
             const { email, password, name } = Cypress.env('user');
 
             // Logout after registration:

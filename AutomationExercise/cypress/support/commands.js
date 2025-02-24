@@ -1,6 +1,34 @@
 import { faker } from '@faker-js/faker';
 import 'cypress-xpath';
 
+Cypress.Commands.add('hideGoogleAds', () => {
+    cy.document().then((doc) => {
+        const style = doc.createElement('style');
+        style.innerHTML = `
+        .google-auto-placed, 
+        iframe[src*="ads"],
+        div[id*="google_ads"],
+        ins.adsbygoogle {
+          display: none !important;
+          visibility: hidden !important;
+        }`;
+        doc.head.appendChild(style);
+    });
+});
+
+
+Cypress.Commands.add("verifyHomePageIsVisible", () => {
+
+    // 1. Launch browser:
+    cy.visit('/');
+
+    // 2. Navigate to url 'http://automationexercise.com':
+    cy.url().should('eq', 'https://automationexercise.com/');
+
+    // 3. Verify that home page is visible successfully:
+    cy.get('body').should('be.visible');
+});
+
 Cypress.Commands.add("registerUser", () => {
 
     const user = {
@@ -23,13 +51,6 @@ Cypress.Commands.add("registerUser", () => {
     // Store user in Cypress environment variable:
     Cypress.env('user', user);
 
-    // 1. Launch browser:
-    cy.visit('/');
-    // 2. Navigate to url 'http://automationexercise.com':
-    cy.url().should('eq', 'https://automationexercise.com/');
-
-    // 3. Verify that home page is visible successfully:
-    cy.get('body').should('be.visible');
 
     // 4. Click on 'Signup / Login' button:
 

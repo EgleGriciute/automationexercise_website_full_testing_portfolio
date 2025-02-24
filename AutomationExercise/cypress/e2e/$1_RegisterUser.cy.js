@@ -2,11 +2,18 @@
 
 describe("$1_RegisterUser", () => {
 
+    before(() => {
+        cy.hideGoogleAds();
+    })
+
     it("should register a new user and then delete the account", () => {
 
         // 1. Launch browser:
         // 2. Navigate to url 'http://automationexercise.com':
         // 3. Verify that home page is visible successfully:
+
+        cy.verifyHomePageIsVisible();
+
         // 4. Click on 'Signup / Login' button:
         // 5. Verify 'New User Signup!' is visible:
         // 6. Enter name and email address:

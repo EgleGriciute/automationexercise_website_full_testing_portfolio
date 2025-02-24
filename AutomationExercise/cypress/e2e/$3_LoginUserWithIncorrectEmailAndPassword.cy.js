@@ -1,17 +1,27 @@
 /// <reference types="cypress" />
 
 describe("$3_LoginUserWithIncorrectEmailAndPassword", () => {
+
+    before(() => {
+        cy.hideGoogleAds();
+    })
+
     beforeEach(() => {
+
         // Navigate to the login page before each test:
+
         cy.visit("/");
     });
 
     it("should display an error when logging in with incorrect credentials", () => {
+
         cy.registerUser().then(() => {
 
-            // 1. Launch browser
-            // 2. Navigate to url 'http://automationexercise.com'
-            // 3. Verify that home page is visible successfully
+            // 1. Launch browser:
+            // 2. Navigate to url 'http://automationexercise.com':
+            // 3. Verify that home page is visible successfully:
+
+            cy.verifyHomePageIsVisible();
 
             const { email, password } = Cypress.env("user");
 

@@ -4,12 +4,16 @@ describe("$2_LoginUserWithCorrectEmailAndPassword", () => {
 
     before(() => {
 
-        // Register a user before running the test:
-        cy.registerUser();
-
         // 1. Launch browser:
         // 2. Navigate to url 'http://automationexercise.com':
         // 3. Verify that home page is visible successfully:
+
+        cy.hideGoogleAds();
+        cy.verifyHomePageIsVisible();
+
+        // Register a user before running the test:
+        cy.registerUser();
+
     });
 
     beforeEach(() => {
@@ -36,6 +40,7 @@ describe("$2_LoginUserWithCorrectEmailAndPassword", () => {
     });
 
     it("should log in with correct credentials and verify user is logged in", () => {
+
         const { name } = Cypress.env('user');
 
         // Navigate to home page (assuming user is already logged in via session):

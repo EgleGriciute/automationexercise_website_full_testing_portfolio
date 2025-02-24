@@ -2,23 +2,29 @@
 
 describe("$5_RegisterUserWithExistingEmail", () => {
 
+    before(() => {
+        cy.hideGoogleAds();
+    })
+
     beforeEach(() => {
         // Navigate to the login page before each test:
         cy.visit('/');
     });
 
-    it("Should register a new user", () => {
+    it("should register a new user", () => {
 
         // 1. Launch browser:
         // 2. Navigate to url 'http://automationexercise.com':
         // 3. Verify that home page is visible successfully:
+
+        cy.verifyHomePageIsVisible();
 
         cy.registerUser().then(() => {
             cy.get("a[href='/logout']").click();
         });
     });
 
-    it("Should show an error when registering with an existing email", () => {
+    it("should show an error when registering with an existing email", () => {
 
         // Retrieve data:
         const registeredName = Cypress.env('user').name;
