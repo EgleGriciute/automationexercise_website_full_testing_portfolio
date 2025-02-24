@@ -24,11 +24,12 @@ Cypress.Commands.add("registerUser", () => {
     Cypress.env('user', user);
 
     // 1. Launch browser:
+    cy.visit('/');
     // 2. Navigate to url 'http://automationexercise.com':
-    cy.visit("/");
+    cy.url().should('eq', 'https://automationexercise.com/');
 
     // 3. Verify that home page is visible successfully:
-    // cy.get("header").should("be.visible");
+    cy.get('body').should('be.visible');
 
     // 4. Click on 'Signup / Login' button:
 

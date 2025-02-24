@@ -2,7 +2,7 @@
 
 describe("$1_RegisterUser", () => {
 
-    it("$1_RegisterUser", () => {
+    it("should register a new user and then delete the account", () => {
 
         // 1. Launch browser:
         // 2. Navigate to url 'http://automationexercise.com':
