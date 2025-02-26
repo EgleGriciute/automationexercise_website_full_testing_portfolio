@@ -15,12 +15,25 @@ Cypress.Commands.add("verifyHomePageIsVisible", () => {
 
 Cypress.Commands.add("registerUser", () => {
 
+    function getRandomMonth() {
+        const month = Math.floor(Math.random() * 12) + 1;
+        return month.toString().padStart(2, '0');
+    }
+
+    // Generate user data object:
+
     const user = {
+
+        // General data:
         id: faker.string.uuid(),
         sex: faker.person.sex(),
         name: faker.person.fullName(),
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
+        email: faker.internet.email(),
+        password: faker.internet.password({ length: 20 }),
+
+        // Contact information:
         company: faker.company.name(),
         address1: faker.location.streetAddress(),
         address2: faker.location.secondaryAddress(),
@@ -28,13 +41,16 @@ Cypress.Commands.add("registerUser", () => {
         city: faker.location.city(),
         zipCode: faker.location.zipCode(),
         phoneNumber: faker.phone.number({ style: 'international' }),
-        email: faker.internet.email(),
-        password: faker.internet.password({ length: 20 })
+
+        // Credit card information:
+        creditCardNumber: faker.finance.creditCardNumber(),
+        creditCardCVC: faker.finance.creditCardCVV(),
+        month: getRandomMonth(),
+        year: faker.number.int({ min: 2030, max: 2035 })
     };
 
     // Store user in Cypress environment variable:
     Cypress.env('user', user);
-
 
     // 4. Click on 'Signup / Login' button:
 
@@ -114,13 +130,29 @@ Cypress.Commands.add("registerUser", () => {
 });
 
 Cypress.Commands.add("deleteAccount", () => {
-    // 17. Click 'Delete Account' button:
+    // Click 'Delete Account' button:
     cy.get("ul.nav li > a[href='/delete_account']").click();
 
-    // 18. Verify that 'ACCOUNT DELETED!' is visible and click 'Continue' button:
+    // Verify that 'ACCOUNT DELETED!' is visible and click 'Continue' button:
     cy.url().should('include', '/delete_account');
     cy.get("h2 > b").should("have.text", "Account Deleted!");
 
     cy.get("[data-qa='continue-button']").click();
     cy.url().should('include', '/');
+});
+
+Cypress.Commands.add("addProductToCart", () => {
+
+    cy.get(".overlay-content > a[data-product-id]").its("length").then((length) => {
+
+        // Ensure length does not exceed 44 (max index is 43):
+        const maxLength = Math.min(length, 44);
+
+        // Generate a random index within the valid range:
+        const randomIndex = Math.floor(Math.random() * maxLength);
+        cy.get(".overlay-content > a[data-product-id]").eq(randomIndex).click({ force: true });
+
+        // Click on 'Continue' button:
+        cy.get(("[data-dismiss='modal']")).click();
+    });
 })
