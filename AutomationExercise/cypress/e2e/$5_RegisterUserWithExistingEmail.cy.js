@@ -2,10 +2,6 @@
 
 describe("$5_RegisterUserWithExistingEmail", () => {
 
-    before(() => {
-        cy.hideGoogleAds();
-    })
-
     beforeEach(() => {
         // Navigate to the login page before each test:
         cy.visit('/');

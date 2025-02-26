@@ -1,22 +1,6 @@
 import { faker } from '@faker-js/faker';
 import 'cypress-xpath';
 
-Cypress.Commands.add('hideGoogleAds', () => {
-    cy.document().then((doc) => {
-        const style = doc.createElement('style');
-        style.innerHTML = `
-        .google-auto-placed, 
-        iframe[src*="ads"],
-        div[id*="google_ads"],
-        ins.adsbygoogle {
-          display: none !important;
-          visibility: hidden !important;
-        }`;
-        doc.head.appendChild(style);
-    });
-});
-
-
 Cypress.Commands.add("verifyHomePageIsVisible", () => {
 
     // 1. Launch browser:

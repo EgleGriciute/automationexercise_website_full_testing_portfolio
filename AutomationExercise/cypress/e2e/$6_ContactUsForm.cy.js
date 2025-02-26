@@ -5,10 +5,6 @@ import 'cypress-file-upload';
 
 describe("$6_ContactUsForm", () => {
 
-    beforeEach(() => {
-        cy.hideGoogleAds();
-    })
-
     it("should fill in 'Contact us' Form", () => {
 
         // 1. Launch browser:

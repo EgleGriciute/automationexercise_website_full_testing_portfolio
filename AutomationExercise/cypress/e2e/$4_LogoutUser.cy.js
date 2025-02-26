@@ -2,10 +2,6 @@
 
 describe("$4_LogoutUser", () => {
 
-    before(() => {
-        cy.hideGoogleAds();
-    })
-
     beforeEach(() => {
         // Navigate to the login page before each test:
         cy.visit('/');

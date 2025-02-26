@@ -1,10 +1,16 @@
 const { defineConfig } = require("cypress");
 
-module.exports = defineConfig({
+module.exports = {
   e2e: {
-    baseUrl: "https://automationexercise.com",
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      // Your setup here
     },
+    baseUrl: 'https://automationexercise.com', // Set the base URL
+    blockHosts: [
+      'www.google-analytics.com', // Block analytics
+      '*.googleadservices.com', // Block ad services
+      '*.doubleclick.net', // Block DoubleClick ads
+      '*.googletagmanager.com', // Block Google Tag Manager
+    ],
   },
-});
+};

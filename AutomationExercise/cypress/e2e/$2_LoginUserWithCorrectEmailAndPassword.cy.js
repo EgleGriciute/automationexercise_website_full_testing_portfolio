@@ -8,7 +8,6 @@ describe("$2_LoginUserWithCorrectEmailAndPassword", () => {
         // 2. Navigate to url 'http://automationexercise.com':
         // 3. Verify that home page is visible successfully:
 
-        cy.hideGoogleAds();
         cy.verifyHomePageIsVisible();
 
         // Register a user before running the test:

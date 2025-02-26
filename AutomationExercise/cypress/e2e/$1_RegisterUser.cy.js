@@ -2,10 +2,6 @@
 
 describe("$1_RegisterUser", () => {
 
-    before(() => {
-        cy.hideGoogleAds();
-    })
-
     it("should register a new user and then delete the account", () => {
 
         // 1. Launch browser:

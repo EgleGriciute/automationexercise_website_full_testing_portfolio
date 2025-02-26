@@ -2,9 +2,6 @@
 
 describe("$3_LoginUserWithIncorrectEmailAndPassword", () => {
 
-    before(() => {
-        cy.hideGoogleAds();
-    })
 
     beforeEach(() => {
 
