@@ -1,16 +1,25 @@
-const { defineConfig } = require("cypress");
+const dotenv = require('dotenv');
+const path = require('path');
+
+// Load environment variables from the `.env` file inside `cypress/fixtures/`
+dotenv.config({ path: path.resolve(__dirname, 'cypress/fixtures/.env') });
 
 module.exports = {
   e2e: {
     setupNodeEvents(on, config) {
-      // Your setup here
+      // Merge process.env variables into Cypress config
+      config.env = {
+        ...config.env,  // Keep existing Cypress env variables
+        ...process.env  // Load variables from `.env`
+      };
+      return config;
     },
-    baseUrl: 'https://automationexercise.com', // Set the base URL
+    baseUrl: 'https://automationexercise.com',
     blockHosts: [
-      'www.google-analytics.com', // Block analytics
-      '*.googleadservices.com', // Block ad services
-      '*.doubleclick.net', // Block DoubleClick ads
-      '*.googletagmanager.com', // Block Google Tag Manager
+      'www.google-analytics.com',
+      '*.googleadservices.com',
+      '*.doubleclick.net',
+      '*.googletagmanager.com',
     ],
   },
 };

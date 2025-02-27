@@ -2,9 +2,11 @@
 
 describe("$5_RegisterUserWithExistingEmail", () => {
 
-    beforeEach(() => {
-        // Navigate to the login page before each test:
-        cy.visit('/');
+    before(() => {
+        // Register a user before running the test as prerequisite:
+        cy.visit("/");
+        cy.registerUser();
+        cy.logoutUser();
     });
 
     it("should register a new user", () => {
@@ -15,17 +17,6 @@ describe("$5_RegisterUserWithExistingEmail", () => {
 
         cy.verifyHomePageIsVisible();
 
-        cy.registerUser().then(() => {
-            cy.get("a[href='/logout']").click();
-        });
-    });
-
-    it("should show an error when registering with an existing email", () => {
-
-        // Retrieve data:
-        const registeredName = Cypress.env('user').name;
-        const registeredEmail = Cypress.env('user').email;
-
         // 4. Click on 'Signup / Login' button:
         cy.get("[href='/login']").click();
 
@@ -33,8 +24,12 @@ describe("$5_RegisterUserWithExistingEmail", () => {
         cy.get(".signup-form h2").should("be.visible");
 
         // 6. Enter name and already registered email address:
-        cy.get("[data-qa='signup-name']").type(registeredName);
-        cy.get("[data-qa='signup-email']").type(registeredEmail);
+
+        const email = Cypress.env('EMAIL');
+        const name = Cypress.env('NAME');
+
+        cy.get("[data-qa='signup-name']").type(name);
+        cy.get("[data-qa='signup-email']").type(email);
 
         // 7. Click 'Signup' button:
         cy.get("[data-qa='signup-button']").click();

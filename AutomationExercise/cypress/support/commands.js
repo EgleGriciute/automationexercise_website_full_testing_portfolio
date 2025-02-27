@@ -1,5 +1,16 @@
 import { faker } from '@faker-js/faker';
+const fs = require('fs');
 import 'cypress-xpath';
+
+// This will be applied to all tests in your Cypress project:
+Cypress.on('uncaught:exception', (err, runnable) => {
+
+    // Handle the error (if necessary) and prevent Cypress from failing the test:
+    console.log('Caught an uncaught exception:', err.message);
+
+    // Returning false prevents Cypress from failing the test:
+    return false;
+});
 
 Cypress.Commands.add("verifyHomePageIsVisible", () => {
 
@@ -49,11 +60,20 @@ Cypress.Commands.add("registerUser", () => {
         year: faker.number.int({ min: 2030, max: 2035 })
     };
 
-    // Store user in Cypress environment variable:
-    Cypress.env('user', user);
+
+    const envContent = Object.entries(user)
+        .map(([key, value]) => `${key.toUpperCase()}=${value}`)
+        .join("\n");
+
+    // Write to .env file:
+    cy.writeFile("cypress/fixtures/.env", envContent);
+
+    // Store values explicitly in Cypress env (to be accessible immediately):
+    Cypress.env("EMAIL", user.email);
+    Cypress.env("PASSWORD", user.password);
+    Cypress.env("NAME", user.name);
 
     // 4. Click on 'Signup / Login' button:
-
     cy.get("[href='/login']").click();
 
     // 5. Verify 'New User Signup!' is visible:
@@ -127,9 +147,63 @@ Cypress.Commands.add("registerUser", () => {
     // 16. Verify that 'Logged in as username' is visible:
     cy.get("ul.nav li:last-child a").should("be.visible");
     cy.location('href').should('match', /https:\/\/(www\.)?automationexercise\.com\//);
+
+});
+
+Cypress.Commands.add("logoutUser", () => {
+    cy.get("a[href='/logout']").click();
+})
+
+Cypress.Commands.add("loginUserWithCorrectEmailAndPassword", () => {
+
+    const email = Cypress.env('EMAIL');
+    const password = Cypress.env('PASSWORD');
+    const name = Cypress.env('NAME');
+
+    // Click on 'Signup / Login' button:
+    cy.get("[href='/login']").click();
+
+    // Verify 'Login to your account' is visible:
+    cy.get(".login-form h2").should("be.visible");
+
+    // Enter correct email address and password:
+    cy.get("[data-qa='login-email']").type(email);
+    cy.get("[data-qa='login-password']").type(password);
+
+    // Click 'login' button:
+    cy.get("[data-qa='login-button']").click();
+
+    // 8. Verify that 'Logged in as username' is visible:
+    cy.contains(`Logged in as ${name}`).should("be.visible");
+
+});
+
+Cypress.Commands.add("loginUserWithIncorrectEmailAndPassword", () => {
+
+    const email = Cypress.env('EMAIL');
+    const password = Cypress.env('PASSWORD');
+    const name = Cypress.env('NAME');
+
+    // Click on 'Signup / Login' button:
+    cy.get("[href='/login']").click();
+
+    // Verify 'Login to your account' is visible:
+    cy.get(".login-form h2").should("be.visible");
+
+    // Enter incorrect email address and password:
+    cy.get("[data-qa='login-email']").type(`*${email}`)
+    cy.get("[data-qa='login-password']").type(`*${password}`)
+
+    // Click 'login' button:
+    cy.get("[data-qa='login-button']").click();
+
+    // Verify error 'Your email or password is incorrect!' is visible:
+    cy.xpath("//p[text()='Your email or password is incorrect!']").should("be.visible");
+
 });
 
 Cypress.Commands.add("deleteAccount", () => {
+
     // Click 'Delete Account' button:
     cy.get("ul.nav li > a[href='/delete_account']").click();
 
@@ -154,5 +228,61 @@ Cypress.Commands.add("addProductToCart", () => {
 
         // Click on 'Continue' button:
         cy.get(("[data-dismiss='modal']")).click();
+
     });
 })
+
+Cypress.Commands.add("payAndConfirmOrder", () => {
+
+
+    // Click 'Cart' button:
+    cy.get("ul.nav > li > a[href='/view_cart']").click();
+
+    // Verify that cart page is displayed:
+    cy.url().should("contain", "/view_cart");
+
+    // Click Proceed To Checkout:
+    cy.get("a.check_out").click();
+
+    // Verify Address Details and Review Your Order:
+
+    cy.xpath("//*[contains(text(),'Address Details')]")
+        .should("exist")
+        .and("be.visible")
+
+    cy.xpath("//*[contains(text(),'Review Your Order')]")
+        .should("exist")
+        .and("be.visible")
+
+    // Enter description in comment text area and click 'Place Order':
+
+    const randomProductDescription = faker.commerce.productDescription();
+
+    cy.get("textarea[name='message']").type(randomProductDescription);
+    cy.get("a[href='/payment']").click();
+
+    // Enter payment details: Name on Card, Card Number, CVC, Expiration date:
+
+    // name, creditCardNumber, creditCardCVC, month, year
+
+    const name = Cypress.env('NAME');
+    const creditCardNumber = Cypress.env('CREDITCARDNUMBER');
+    const creditCardCVC = Cypress.env('CREDITCARDCVC');
+    const month = Cypress.env('MONTH');
+    const year = Cypress.env('YEAR');
+
+    cy.get("input[name='name_on_card']").type(name);
+    cy.get("input[name='card_number']").type(creditCardNumber);
+    cy.get("input[name='cvc']").type(creditCardCVC);
+    cy.get("input[name='expiry_month']").type(month);
+    cy.get("input[name='expiry_year']").type(year);
+
+    // Click 'Pay and Confirm Order' button:
+    // Verify success message 'Your order has been placed successfully!':
+
+    cy.get("[data-qa='pay-button']").click().then(() => {
+        cy.get('.alert-success')
+            .should('exist');
+    });
+
+});

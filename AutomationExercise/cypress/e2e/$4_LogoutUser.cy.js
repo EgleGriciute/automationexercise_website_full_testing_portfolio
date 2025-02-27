@@ -2,9 +2,11 @@
 
 describe("$4_LogoutUser", () => {
 
-    beforeEach(() => {
-        // Navigate to the login page before each test:
-        cy.visit('/');
+    before(() => {
+        // Register a user before running the test as prerequisite:
+        cy.visit("/");
+        cy.registerUser();
+        cy.logoutUser();
     });
 
     it("should logout successfully", () => {
@@ -15,34 +17,20 @@ describe("$4_LogoutUser", () => {
 
         cy.verifyHomePageIsVisible();
 
-        cy.registerUser().then(() => {
+        // 4. Click on 'Signup / Login' button:
+        // 5. Verify 'Login to your account' is visible:
+        // 6. Enter correct email address and password:
+        // 7. Click 'login' button:
+        // 8. Verify that 'Logged in as username' is visible:
 
-            const { email, password, name } = Cypress.env('user');
+        cy.loginUserWithCorrectEmailAndPassword();
 
-            // Logout after registration:
-            cy.get("a[href='/logout']").click();
+        // 9. Click 'Logout' button:
 
-            // 4. Click on 'Signup / Login' button:
-            cy.get("[href='/login']").click();
+        cy.logoutUser();
 
-            // 5. Verify 'Login to your account' is visible:
-            cy.get(".login-form h2").should("be.visible");
+        // 10. Verify that user is navigated to login page:
+        cy.location('pathname').should("eq", "/login");
 
-            // 6. Enter correct email address and password:
-            cy.get("[data-qa='login-email']").type(email);
-            cy.get("[data-qa='login-password']").type(password);
-
-            // 7. Click 'login' button:
-            cy.get("[data-qa='login-button']").click();
-
-            // 8. Verify that 'Logged in as username' is visible:
-            cy.get("ul > li:nth-child(10)").should("contain.text", name);
-
-            // 9. Click 'Logout' button:
-            cy.get("a[href='/logout']").click();
-
-            // 10. Verify that user is navigated to login page:
-            cy.location('pathname').should("eq", "/login");
-        });
-    });
+    })
 });

@@ -1,7 +1,5 @@
 /// <reference types="cypress"/>
 
-import { faker } from "@faker-js/faker";
-
 describe("$14_PlaceOrderRegisterWhileCheckout", () => {
 
     it("should place order and register while checkout", () => {
@@ -36,55 +34,23 @@ describe("$14_PlaceOrderRegisterWhileCheckout", () => {
         // 10. Verify 'ACCOUNT CREATED!' and click 'Continue' button:
         // 11. Verify ' Logged in as username' at top:
 
-        cy.registerUser().then(() => {
+        cy.registerUser();
 
-            // 12.Click 'Cart' button:
-            cy.get("ul.nav > li > a[href='/view_cart']").click();
+        // 12.Click 'Cart' button:
+        // 13. Click 'Proceed To Checkout' button:
+        // 14. Verify Address Details and Review Your Order:
+        // 15. Enter description in comment text area and click 'Place Order':
+        // 16. Enter payment details: Name on Card, Card Number, CVC, Expiration date:
+        // 17. Click 'Pay and Confirm Order' button:
+        // 18. Verify success message 'Your order has been placed successfully!':
 
-            // 13. Click 'Proceed To Checkout' button:
-            cy.get("a.check_out").click();
+        cy.payAndConfirmOrder();
 
-            // 14. Verify Address Details and Review Your Order:
+        // 19. Click 'Delete Account' button:
+        // 20. Verify 'ACCOUNT DELETED!' and click 'Continue' button:
 
-            cy.xpath("//*[contains(text(),'Address Details')]")
-                .should("exist")
-                .and("be.visible")
+        cy.deleteAccount();
 
-            cy.xpath("//*[contains(text(),'Review Your Order')]")
-                .should("exist")
-                .and("be.visible")
-
-            // 15. Enter description in comment text area and click 'Place Order':
-
-            const randomProductDescription = faker.commerce.productDescription();
-
-            cy.get("textarea[name='message']").type(randomProductDescription);
-            cy.get("a[href='/payment']").click();
-
-            // 16. Enter payment details: Name on Card, Card Number, CVC, Expiration date:
-
-            const { name, creditCardNumber, creditCardCVC, month, year } = Cypress.env('user');
-
-            cy.get("input[name='name_on_card']").type(name);
-            cy.get("input[name='card_number']").type(creditCardNumber);
-            cy.get("input[name='cvc']").type(creditCardCVC);
-            cy.get("input[name='expiry_month']").type(month);
-            cy.get("input[name='expiry_year']").type(year);
-
-            // 17. Click 'Pay and Confirm Order' button:
-            // 18. Verify success message 'Your order has been placed successfully!':
-
-            cy.get("[data-qa='pay-button']").click().then(() => {
-                cy.get('.alert-success')
-                    .should('exist');
-            });
-
-            // 19. Click 'Delete Account' button:
-            // 20. Verify 'ACCOUNT DELETED!' and click 'Continue' button:
-
-            cy.deleteAccount();
-
-        });
     })
-})
+});
 
