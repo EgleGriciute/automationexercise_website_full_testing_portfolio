@@ -1,0 +1,1271 @@
+{
+	"info": {
+		"_postman_id": "0ebcda69-560c-453d-86a7-42ef2ebff72f",
+		"name": "AutomationExercise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18306743",
+		"_collection_link": "https://eglegriciute.postman.co/workspace/Json-Placeholder-API~5e0d2bde-15bd-4ed6-a07f-b1647736248f/collection/18306743-0ebcda69-560c-453d-86a7-42ef2ebff72f?action=share&source=collection_link&creator=18306743"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "1. AllProductsList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", () => {\r",
+									"    pm.expect(responseData).to.have.property('responseCode').and.eq(200);\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Products list is not empty and have at least one product with all properties\", () => {\r",
+									"    pm.expect(responseData).to.have.property('products').and.not.empty;\r",
+									"    pm.expect(responseData.products).to.be.an('array').that.is.not.empty;\r",
+									"    responseData.products.forEach((product) => {  \r",
+									"        pm.expect(product).to.have.property('id');\r",
+									"        pm.expect(product).to.have.property('name');\r",
+									"        pm.expect(product).to.have.property('price');\r",
+									"        pm.expect(product).to.have.property('brand');\r",
+									"        pm.expect(product).to.have.property('category');\r",
+									"        pm.expect(product.category).to.have.property('usertype');\r",
+									"        pm.expect(product.category.usertype).to.have.property('usertype');\r",
+									"        pm.expect(product.category).to.have.property('category');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Products in list have correct types of properties values\", () => {\r",
+									"    responseData.products.forEach((product) => {  \r",
+									"        pm.expect(product.id).to.be.a('number');\r",
+									"        pm.expect(product.name).to.be.a('string');\r",
+									"        pm.expect(product.price).to.be.a('string');\r",
+									"        pm.expect(product.brand).to.be.a('string');\r",
+									"        pm.expect(product.category).to.be.an('object');\r",
+									"        pm.expect(product.category.usertype).to.be.an('object');\r",
+									"        pm.expect(product.category.usertype.usertype).to.be.a('string');\r",
+									"        pm.expect(product.category.category).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/productsList",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"productsList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. ToAllProdctsList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response JSON contains 405 code\", () => {\r",
+									"    pm.expect(responseData).to.have.property('responseCode').and.eq(405);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains correct message\", function () {\r",
+									"    pm.expect(responseData.message).to.eql(\"This request method is not supported.\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"id\": 44,\r\n            \"name\": \"Floral dress\",\r\n            \"price\": \"Rs. 1500\",\r\n            \"brand\": \"Gucci\",\r\n            \"category\": {\r\n                \"usertype\": {\r\n                    \"usertype\": \"Women\"\r\n                },\r\n                \"category\": \"Dress\"\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/productsList",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"productsList"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Brands",
+			"item": [
+				{
+					"name": "3. AllBrandsList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", () => {\r",
+									"    pm.expect(responseData).to.have.property('responseCode').and.eq(200);\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Brands list is not empty and have at least one brand with all properties\", () => {\r",
+									"    pm.expect(responseData).to.have.property('brands').and.not.empty;\r",
+									"    pm.expect(responseData.brands).to.be.an('array').that.is.not.empty;\r",
+									"    responseData.brands.forEach((brand) => {  \r",
+									"        pm.expect(brand).to.have.property('id');\r",
+									"        pm.expect(brand).to.have.property('brand');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Brands in list have correct types of properties values\", () => {\r",
+									"    responseData.brands.forEach((brand) => {  \r",
+									"        pm.expect(brand.id).to.be.a('number');\r",
+									"        pm.expect(brand.brand).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/brandsList",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"brandsList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. ToAllBrandsList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains correct response code\", function () {\r",
+									"    pm.expect(responseData).to.have.property('responseCode').and.eq(405);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains correct error message\", function () {\r",
+									"    pm.expect(responseData.message).to.eql(\"This request method is not supported.\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Floral dress\",\r\n            \"price\": \"Rs. 1500\",\r\n            \"brand\": \"Gucci\",\r\n            \"category\": {\r\n                \"usertype\": {\r\n                    \"usertype\": \"Women\"\r\n                },\r\n                \"category\": \"Dress\"\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/brandsList",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"brandsList"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "5. ToSearchProduct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", () => {\r",
+									"    pm.expect(responseData).to.have.property('responseCode').and.eq(200);\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"A search term is mentioned in the product name or category\", () => {\r",
+									"    responseData.products.forEach((product) => {\r",
+									"        \r",
+									"        const nameIncludesSearchTerm = product.name.toLowerCase().includes(pm.collectionVariables.get(\"search_product\").toLowerCase());\r",
+									"        const categoryIncludesSearchTerm = product.category.category.toLowerCase().includes(pm.collectionVariables.get(\"search_product\").toLowerCase());\r",
+									"\r",
+									"        pm.expect(nameIncludesSearchTerm || categoryIncludesSearchTerm).to.be.true;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Products list is not empty and have at least one product with all properties\", () => {\r",
+									"    pm.expect(responseData).to.have.property('products').and.not.empty;\r",
+									"    pm.expect(responseData.products).to.be.an('array').that.is.not.empty;\r",
+									"    responseData.products.forEach((product) => {  \r",
+									"        pm.expect(product).to.have.property('id');\r",
+									"        pm.expect(product).to.have.property('name');\r",
+									"        pm.expect(product).to.have.property('price');\r",
+									"        pm.expect(product).to.have.property('brand');\r",
+									"        pm.expect(product).to.have.property('category');\r",
+									"        pm.expect(product.category).to.have.property('usertype');\r",
+									"        pm.expect(product.category.usertype).to.have.property('usertype');\r",
+									"        pm.expect(product.category).to.have.property('category');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Products in list have correct types of properties values\", () => {\r",
+									"    responseData.products.forEach((product) => {  \r",
+									"        pm.expect(product.id).to.be.a('number');\r",
+									"        pm.expect(product.name).to.be.a('string');\r",
+									"        pm.expect(product.price).to.be.a('string');\r",
+									"        pm.expect(product.brand).to.be.a('string');\r",
+									"        pm.expect(product.category).to.be.an('object');\r",
+									"        pm.expect(product.category.usertype).to.be.an('object');\r",
+									"        pm.expect(product.category.usertype.usertype).to.be.a('string');\r",
+									"        pm.expect(product.category.category).to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (!pm.collectionVariables.get(\"iteration\")) {\r",
+									"    pm.collectionVariables.set(\"iteration\", 0);\r",
+									"}\r",
+									"\r",
+									"// Define the search terms array:\r",
+									"const searchTerms = [\"top\", \"tshirt\", \"jean\"];\r",
+									"\r",
+									"// Get the current iteration count:\r",
+									"let iteration = parseInt(pm.collectionVariables.get(\"iteration\"));\r",
+									"\r",
+									"// Set the current search term based on the iteration:\r",
+									"pm.collectionVariables.set(\"search_product\", searchTerms[iteration % searchTerms.length]);\r",
+									"\r",
+									"// Increment the iteration for next time:\r",
+									"pm.collectionVariables.set(\"iteration\", iteration + 1);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "search_product",
+									"value": "{{search_product}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/searchProduct",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"searchProduct"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. ToSearchProductWithoutSearch_ProductParameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response contains correct response code\", function () {\r",
+									"    pm.expect(responseData).to.have.property('responseCode').and.eq(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains correct error message\", function () {\r",
+									"    pm.expect(responseData.message).to.eql(\"Bad request, search_product parameter is missing in POST request.\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/searchProduct",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"searchProduct"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "VerifyLogin",
+			"item": [
+				{
+					"name": "7. ToVerifyLoginWithValidDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const respData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response code is 200\", () => {\r",
+									"    pm.expect(respData.responseCode).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body exists\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response message correct\", () => {\r",
+									"    pm.expect(respData.message).to.eql(\"User exists!\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "johndoe1982@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "P@s5w0rd8X!q",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/verifyLogin",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"verifyLogin"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8. ToVerifyLoginWithoutEmailParameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\",() => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response code is 400\",() => {\r",
+									"    pm.expect(responseData.responseCode).to.eq(400);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response message correct\",() => {\r",
+									"    pm.expect(responseData.message).to.eql(\"Bad request, email or password parameter is missing in POST request.\");\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/verifyLogin",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"verifyLogin"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "test",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9. ToVerifyLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response code is 405\", () => {\r",
+									"    pm.expect(responseData.responseCode).to.eql(405);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response message is correct\", () => {\r",
+									"    pm.expect(responseData.message).to.eql(\"This request method is not supported.\");\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/verifyLogin",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"verifyLogin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10. ToVerifyLoginWithInvalidDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response code is 404\", () => {\r",
+									"    pm.expect(responseData.responseCode).to.eql(404)\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Correct response message\", () => {\r",
+									"    pm.expect(responseData.message).to.eql(\"User not found!\")\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "johndoe1982@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "P@s5w0rd8X!q",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/verifyLogin?email&password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"verifyLogin"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": null
+								},
+								{
+									"key": "password",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserAccount",
+			"item": [
+				{
+					"name": "11. ToCreate/RegisterUserAccount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const respData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response code is 201\", () => {\r",
+									"    pm.expect(respData.responseCode).to.eql(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body exists\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response message correct\", () => {\r",
+									"    pm.expect(respData.message).to.eql(\"User created!\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Mr.",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "John Doe",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "johndoe1982@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "P@s5w0rd8X!q",
+									"type": "text"
+								},
+								{
+									"key": "mobile_number",
+									"value": "(619) 555-8742",
+									"type": "text"
+								},
+								{
+									"key": "birth_day",
+									"value": "07",
+									"type": "text"
+								},
+								{
+									"key": "birth_month",
+									"value": "07",
+									"type": "text"
+								},
+								{
+									"key": "birth_year",
+									"value": "1995",
+									"type": "text"
+								},
+								{
+									"key": "firstname",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "company",
+									"value": "Horizon Innovations",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "742 Maple Avenue",
+									"type": "text"
+								},
+								{
+									"key": "address2",
+									"value": "Apt 305",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "United States",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "California",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "San Diego",
+									"type": "text"
+								},
+								{
+									"key": "zipcode",
+									"value": "92101",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/createAccount",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"createAccount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12. ToDeleteUserAccount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const respData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response status 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response code is 200\", () => {\r",
+									"    pm.expect(respData.responseCode).to.eql(200);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body exists\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response message correct\", () => {\r",
+									"    pm.expect(respData.message).to.eql(\"Account deleted!\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "johndoe1982@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "P@s5w0rd8X!q",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/deleteAccount",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"deleteAccount"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "13. ToUpdateUserAccount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response code is 200\", () => {\r",
+									"    pm.expect(responseData.responseCode).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body exists\", () => {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response message correct\", () => {\r",
+									"    pm.expect(responseData.message).to.eql(\"User updated!\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John Doe",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "johndoe1982@example.com",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "Mr.",
+									"type": "text"
+								},
+								{
+									"key": "birth_day",
+									"value": "02",
+									"type": "text"
+								},
+								{
+									"key": "birth_month",
+									"value": "06",
+									"type": "text"
+								},
+								{
+									"key": "birth_year",
+									"value": "1982",
+									"type": "text"
+								},
+								{
+									"key": "firstname",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "742 Maple Avenue",
+									"type": "text"
+								},
+								{
+									"key": "address2",
+									"value": "Apt 305",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "United States",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "California",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "San Diego",
+									"type": "text"
+								},
+								{
+									"key": "zipcode",
+									"value": "92102",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "P@s5w0rd8X!q",
+									"type": "text"
+								},
+								{
+									"key": "mobile_number",
+									"value": "(619) 555-8742",
+									"type": "text"
+								},
+								{
+									"key": "company",
+									"value": "Horizon Innoations",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/updateAccount",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"updateAccount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "14. UserAccountDetailByEmail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"\r",
+									"const responseDateObjectKeys = Object.keys(responseData.user);\r",
+									"const responseDateObjectValues = Object.values(responseData.user);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response code is 200\", () => {\r",
+									"    pm.expect(responseData).to.have.property('responseCode').and.eq(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"User account details not empty\", () =>{\r",
+									"    pm.expect(responseData).to.have.property('user').and.not.empty;\r",
+									"    pm.expect(responseData.user).to.be.an('object').that.is.not.empty;\r",
+									"})\r",
+									"\r",
+									"pm.test(\"All 16 parameter keys get returned and are not empty\", () => {\r",
+									"    pm.expect(responseDateObjectKeys).to.have.lengthOf(16).and.not.to.be.empty;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"All 16 parameters values get returned and are not empty\", () => {\r",
+									"    pm.expect(responseDateObjectValues).to.have.lengthOf(16).and.not.to.be.empty;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Email format is valid\", () => {\r",
+									"    pm.expect(responseData.user.email).to.match(\r",
+									"        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$/\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"pm.test(\"birth_day is valid or empty\", () => {\r",
+									"    let birthDay = responseData.user.birth_day;\r",
+									"    pm.expect(birthDay).to.be.oneOf([\"\", \"01\", \"02\", \"03\", \"04\", \"05\", \"06\", \"07\", \"08\", \"09\", \"10\", \"11\", \"12\", \"13\", \"14\", \"15\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"27\", \"28\", \"29\", \"30\", \"31\"]);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/getUserDetailByEmail?email=johndoe1982@example.com",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"getUserDetailByEmail"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "johndoe1982@example.com"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Response time is less than 1s\", () => {\r",
+					"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "search_product",
+			"value": ""
+		},
+		{
+			"key": "iteration",
+			"value": ""
+		}
+	]
+}

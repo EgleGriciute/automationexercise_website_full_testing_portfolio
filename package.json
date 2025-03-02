@@ -1,0 +1,23 @@
+{
+  "name": "automationexercise",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo 'No server needed for testing'",
+    "test": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@faker-js/faker": "^9.5.0",
+    "cypress": "^14.1.0",
+    "cypress-downloadfile": "^1.2.4",
+    "cypress-file-upload": "^5.0.8",
+    "cypress-xpath": "^2.0.1",
+    "dotenv": "^16.4.7",
+    "newman": "^6.2.1",
+    "wait-on": "^8.0.2"
+  }
+}
