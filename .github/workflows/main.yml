@@ -13,7 +13,7 @@ jobs:
     steps:
       # Step 1: Checkout code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       # Step 2: List directory contents for debugging
       - name: List directory contents
@@ -21,7 +21,7 @@ jobs:
       
       # Step 3: Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20.18.0'
       
@@ -52,7 +52,8 @@ jobs:
       # Optional: Upload Newman test results as artifact
       - name: Upload Newman Test Results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: newman-results
           path: newman-results.xml
+          retention-days: 5
