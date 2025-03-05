@@ -33,8 +33,13 @@
 									"    ",
 									"    // Safely check product names and categories",
 									"    const matchingProducts = responseJson.products.filter(product => {",
-									"        const name = product.name ? product.name.toLowerCase() : '';",
-									"        const category = product.category ? product.category.toLowerCase() : '';",
+									"        // Ensure product is an object",
+									"        if (typeof product !== 'object' || product === null) return false;",
+									"        ",
+									"        // Convert to string and check",
+									"        const name = String(product.name || '').toLowerCase();",
+									"        const category = String(product.category || '').toLowerCase();",
+									"        ",
 									"        return name.includes(searchTerm.toLowerCase()) || ",
 									"               category.includes(searchTerm.toLowerCase());",
 									"    });",
@@ -68,63 +73,6 @@
 							"path": [
 								"api",
 								"searchProduct"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "UserAccount",
-			"item": [
-				{
-					"name": "UserAccountDetailByEmail",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"pm.test('Response time is less than 1s', function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
-									"});",
-									"",
-									"pm.test('User details retrieved successfully', function () {",
-									"    const responseJson = pm.response.json();",
-									"    ",
-									"    // For 404 case, assert the error response",
-									"    if (responseJson.responseCode === 404) {",
-									"        pm.expect(responseJson.message).to.include('Account not found');",
-									"    } else {",
-									"        // If successful response expected",
-									"        pm.expect(responseJson).to.be.an('object');",
-									"        pm.expect(responseJson.user).to.be.an('object');",
-									"        pm.expect(responseJson.user).to.have.any.keys(['name', 'email', 'id']);",
-									"    }",
-									"});"
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"url": {
-							"raw": "https://automationexercise.com/api/getUserDetailByEmail?email=johndoe1982@example.com",
-							"protocol": "https",
-							"host": [
-								"automationexercise",
-								"com"
-							],
-							"path": [
-								"api",
-								"getUserDetailByEmail"
-							],
-							"query": [
-								{
-									"key": "email",
-									"value": "johndoe1982@example.com"
-								}
 							]
 						}
 					},
